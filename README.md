@@ -1,5 +1,5 @@
 # ShipChallenge
-For the [Kaggel competition](https://www.kaggle.com/competitions/airbus-ship-detection/overview/) I have built Unet with the efficient net as the encoder using PyTorch.<br />
+For the [Kaggel competition](https://www.kaggle.com/competitions/airbus-ship-detection/overview/) I have built Unet with the efficient net as the encoder and dice loss using PyTorch.<br />
 
 The repo contains the following:<br />
 train.py - script for training - it accumulates training and validation loss and saves best models. If something interrupted training, you can start from the best-saved model.<br />

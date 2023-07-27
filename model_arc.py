@@ -1,41 +1,37 @@
-import albumentations as A
+import albumentations as A #library for simultaneus image and mask augmentation
 from torch import nn
 import segmentation_models_pytorch as smp
 from segmentation_models_pytorch.losses import DiceLoss
 import torch
 from numpy import Inf
 
-
+#define parameters
 IMAGE_SIZE = 192
 ENCODER = 'timm-efficientnet-b0'
 WEIGHTS = 'imagenet'
 LOSS = 'dice'
-DROPOUT = 0.5
 
+# augmentation function - only resize
 def get_augs():
   return A.Resize(IMAGE_SIZE, IMAGE_SIZE)
 
-
+# model architecture - Unet with specified ENCODER and DROPOUT ratio
 class SegmentationModel(nn.Module):
   def __init__(self):
     super(SegmentationModel, self).__init__()
-
-    aux_params = dict(
-      dropout=DROPOUT,  # dropout ratio, default is None
-      classes=0,  # define number of output labels
-    )
     self.arc = smp.Unet(
         encoder_name=ENCODER,
         encoder_weights=WEIGHTS,
         in_channels=3,
         classes=1,
-        activation=None
+        activation=None,
     )
+  # we may chose 'dice loss' or combination of 'dice loss and bse'
   def forward(self, images, masks=None):
     logits = self.arc(images)
     if masks != None:
       loss1 = DiceLoss(mode='binary')(logits, masks)
-      if LOSS == 'dice+bse':
+      if LOSS == 'dice_bse':
           loss = nn.BCEWithLogitsLoss()
           loss2 = loss(logits, masks)
           return logits, loss1+loss2
@@ -44,16 +40,18 @@ class SegmentationModel(nn.Module):
     return logits
 
 
+# define ErlyStopping class, which saves model for the smallest validation loss
+# if it doesn't improve over 'patience' epochs, it stops training
 class EarlyStopping:
     """Early stops the training if validation loss doesn't improve after a given patience or if training loss doesn't improve after a given t_patience"""
-    def __init__(self, patience=5, t_patience=3, verbose=False, path='checkpoint.pt'):
+    def __init__(self, patience=7, t_patience=5, verbose=False, path='checkpoint.pt'):
         """
         Args:
             patience (int): How long to wait after last time validation loss improved.
                             Default: 7
             t_patience  (int): How long to wait after train loss is not improving
-                            Deafault: 10
-            verbose (bool): If True, prints a message for each validation loss improvement.
+                            Deafault: 5
+            verbose (bool): If True, prints a message for each epoch
                             Default: False
             path (str): Path for the checkpoint to be saved to.
                             Default: 'checkpoint.pt'
@@ -95,7 +93,6 @@ class EarlyStopping:
             self.best_score = score
             self.save_checkpoint(score, model)
             self.counter = 0
-
 
     def save_checkpoint(self, val_loss, model):
         '''Saves model when validation loss decrease.'''

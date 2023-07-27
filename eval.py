@@ -120,18 +120,18 @@ def plot_learning_curves(train_losses, valid_losses, valid_F2, epoch, model_name
       loss (str): loss may be 'dice' or 'dice_bse'
   """
     plt.figure(figsize=(20, 10))
-    plt.plot(range(1, epoch + 2), train_losses, 'y', label='average train loss per batch')
-    plt.plot(range(1, epoch + 2), valid_losses, 'b', label='average valid loss per batch')
-    plt.text(epoch // 2, valid_losses[1], 'F2 valid score', weight='bold', fontsize=16)
+    plt.plot(range(1, epoch + 2), train_losses, 'y', label='average train loss per batch', lw=5)
+    plt.plot(range(1, epoch + 2), valid_losses, 'b', label='average valid loss per batch', lw=5)
+    plt.text(epoch // 2, valid_losses[1], 'F2 valid score', weight='bold', fontsize=35)
     for i in range(1, epoch + 2, 5):
-        plt.text(i, valid_losses[i - 1], str(np.round(valid_F2[i - 1].cpu().numpy(), 2)))
+        plt.text(i, valid_losses[i - 1], str(np.round(valid_F2[i - 1].cpu().numpy(), 2)), fontsize=20)
     if E:
         plt.axvline(x=E, color='r', linestyle="--", linewidth=1, label='early stopping')
-        plt.text(E, valid_losses[E - 1]+0.01, str(np.round(valid_F2[E - 1].cpu().numpy(), 2)), weight='bold')
+        plt.text(E, valid_losses[E - 1]+0.01, str(np.round(valid_F2[E - 1].cpu().numpy(), 2)), weight='bold', fontsize=20)
     else:
-        plt.text(epoch + 1, valid_losses[epoch]+0.01, str(np.round(valid_F2[epoch].cpu().numpy(), 2)), weight='bold')
-    plt.xlabel('# epochs')
-    plt.ylabel(loss)
-    plt.legend()
+        plt.text(epoch + 1, valid_losses[epoch]+0.01, str(np.round(valid_F2[epoch].cpu().numpy(), 2)), weight='bold', fontsize=20)
+    plt.xlabel('# epochs', fontsize=35)
+    plt.ylabel(loss, fontsize=35)
+    plt.legend(fontsize=35)
     plt.savefig(f'reports/{model_name}_final_report')
     plt.close()

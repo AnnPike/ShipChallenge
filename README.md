@@ -1,5 +1,5 @@
 # ShipChallenge
-It is the solution to the Kaggel competition https://www.kaggle.com/competitions/airbus-ship-detection/overview
+It is the solution to the [Kaggel competition] (https://www.kaggle.com/competitions/airbus-ship-detection/overview)
 I have built Unet with the efficient net as the encoder using PyTorch.
 
 

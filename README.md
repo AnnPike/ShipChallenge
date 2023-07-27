@@ -1,5 +1,5 @@
 # ShipChallenge
-For the [Kaggel competition](https://www.kaggle.com/competitions/airbus-ship-detection/overview/) I have built Unet with the efficient net as the encoder and dice loss using PyTorch.<br />
+For the [Kaggel competition](https://www.kaggle.com/competitions/airbus-ship-detection/overview/) I have built Unet with the EfficientNet as the encoder and dice loss using PyTorch.<br />
 
 The repo contains the following:<br />
 ships_vis.ipynb - jupyter notebook to visualize a couple of train examples <br />
